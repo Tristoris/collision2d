@@ -12,10 +12,13 @@ namespace Math2D
     {
         // Instance variables
         public Position[] points;
+        public double angle;
 
         // Constructor
-        public Polygon(Position[] points) {
+        public Polygon(Position[] points, double angle = 0)
+        {
             this.points = points;
+            this.angle = angle;
         }
 
         // Method to check if shape is colliding with another shape
