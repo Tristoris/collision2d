@@ -9,7 +9,7 @@ namespace Math2D
     public class Triangle : Polygon
     {
 
-
+        // Constructor
         public Triangle(Position[] points) : base(points)
         {
             this.points = points;
