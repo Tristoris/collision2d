@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace Math2D
 {
-    public class Triangle : Polygon
+    public abstract class Shape
     {
+        public abstract bool isColliding(Polygon polygon);
 
-
-        public Triangle(Position[] points) : base(points)
-        {
-            this.points = points;
-        }
+        public abstract bool isColliding(Circle circle);
     }
-
 }

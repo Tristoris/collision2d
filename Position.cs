@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace Math2D
 {
-    public class Triangle : Polygon
+    public struct Position
     {
+        public double x;
+        public double y;
 
-
-        public Triangle(Position[] points) : base(points)
-        {
-            this.points = points;
+        public Position(double x, double y) {
+            this.x = x; this.y = y;
         }
     }
-
 }
