@@ -10,12 +10,13 @@ namespace Math2D
     {
 
         // Constructor
-        public Square(Position[] points) : base(points)
+        public Square(Position position, Position[] points) : base(position, points)
         {
-            if (points.Length == 4) this.points = points;
+            if (points.Length == 3) { this.position = position; this.points = points; }
             else
             {
-                this.points = new Position[] { new Position(0, 0), new Position(1, 1), new Position(2, 2), new Position(4,4) };
+                this.position = new Position(0, 0);
+                this.points = new Position[] { new Position(1, 1), new Position(2, 2), new Position(3,3) };
             }
         }
     }

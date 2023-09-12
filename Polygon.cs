@@ -11,12 +11,14 @@ namespace Math2D
     public class Polygon : Shape
     {
         // Instance variables
+        public Position position;
         public Position[] points;
         public double angle;
 
         // Constructor
-        public Polygon(Position[] points, double angle = 0)
+        public Polygon(Position position, Position[] points, double angle = 0)
         {
+            this.position = position;
             this.points = points;
             this.angle = angle;
         }
