@@ -27,7 +27,13 @@ namespace Math2D
         // Method to check if shape is colliding with another shape
         public override bool isColliding(Circle circle)
         {
-            return true;
+            double dx = Math.Pow(this.position.x - circle.position.x, 2);
+            double dy = Math.Pow(this.position.y - circle.position.y, 2);
+            double distance = Math.Sqrt(dx + dy);
+
+            if (this.radius + circle.radius >= distance) return true;
+
+            return false;
         }
 
         // Method to check if shape is inside another shape
@@ -39,7 +45,15 @@ namespace Math2D
         // Method to check if shape is inside another shape
         public override bool isContained(Circle circle)
         {
-            return true;
+            if (this.radius == circle.radius) return false;
+
+            double dx = Math.Pow(this.position.x - circle.position.x, 2);
+            double dy = Math.Pow(this.position.y - circle.position.y, 2);
+            double distance = Math.Sqrt(dx + dy);
+
+            if (this.radius > circle.radius && this.radius > circle.radius + distance) return true;
+            else if (circle.radius > this.radius + distance) return true;
+            return false;
         }
     }
 }
