@@ -12,11 +12,11 @@ namespace Math2D
     {
         // Instance variables
         public Position position;
-        public Vector[] points;
+        public Vector<double>[] points;
         public double angle;
 
         // Constructor
-        public Polygon(Position position, Vector[] points, double angle = 0)
+        public Polygon(Position position, Vector<double>[] points, double angle = 0)
         {
             this.position = position;
             this.points = points;

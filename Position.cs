@@ -17,5 +17,10 @@ namespace Math2D
         public Position(double x, double y) {
             this.x = x; this.y = y;
         }
+
+        public double[] toArray()
+        {
+            return new double[] { x, y };
+        }
     }
 }
