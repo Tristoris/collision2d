@@ -99,20 +99,29 @@ namespace Math2D
 
             for (int i = 0; i < this.points.Length; i++)
             {
-                this.currentPoints[i].X = (float)Math.Cos(angle * this.points[i].X);
+                this.currentPoints[i].X = (float)Math.Cos(angle * this.points[i].X) - (float)Math.Sin(angle * this.points[i].Y);
+                this.currentPoints[i].Y = (float)Math.Sin(angle * this.points[i].X) + (float)Math.Cos(angle * this.points[i].Y);
             }
         }
 
-        public void resizeCurrent(double percentage) {
-            
+        public override void resizeCurrent(double percentage) {
+            for (int i = 0; i < this.points.Length; i++)
+            {
+                this.currentPoints[i].X = (float)(percentage * this.currentPoints[i].Y);
+                this.currentPoints[i].Y = (float)(percentage * this.currentPoints[i].Y);
+            }
         }
 
-        public void resizeOriginal(double percentage)
+        public override void resizeOriginal(double percentage)
         {
-
+            for (int i = 0; i < this.points.Length; i++)
+            {
+                this.currentPoints[i].X = (float)(percentage * this.points[i].Y);
+                this.currentPoints[i].Y = (float)(percentage * this.points[i].Y);
+            }
         }
 
-        public void changePosition(double x, double y) {
+        public override void changePosition(double x, double y) {
             this.position = new Position(x, y);
         }
     }

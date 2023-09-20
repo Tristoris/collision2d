@@ -12,11 +12,13 @@ namespace Math2D
         // Instance variables
         public Position position;
         public double radius;
+        public double currentRadius;
 
         // Constructor
         public Circle(Position position, double radius) {
             this.position = position;
             this.radius = radius;
+            this.currentRadius = radius;
         }
 
         // Method to check if shape is colliding with another shape
@@ -55,6 +57,21 @@ namespace Math2D
             if (this.radius > circle.radius && this.radius > circle.radius + distance) return true;
             else if (circle.radius > this.radius + distance) return true;
             return false;
+        }
+
+        public override void resizeCurrent(double percentage)
+        {
+            this.currentRadius = percentage * this.currentRadius;
+        }
+
+        public override void resizeOriginal(double percentage)
+        {
+            this.currentRadius = percentage * this.radius;
+        }
+
+        public override void changePosition(double x, double y)
+        {
+            this.position = new Position(x, y);
         }
     }
 }

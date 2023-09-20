@@ -14,5 +14,9 @@ namespace Math2D
         public abstract bool isColliding(Circle circle);
         public abstract bool isContained(Polygon polygon);
         public abstract bool isContained(Circle circle);
+        public abstract void resizeOriginal(double percentage);
+        public abstract void resizeCurrent(double percentage);
+        public abstract void changePosition(double x, double y);
+
     }
 }
