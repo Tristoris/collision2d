@@ -11,13 +11,13 @@ namespace Math2D
     public class Projection
     {
         // Variables
-        Position position;
-        Vector2 distance;
+        double min;
+        double max;
 
         // Constructors
-        public Projection(Position position, Vector2 distance) {
-            this.position = position;
-            this.distance = distance;
+        public Projection(double min, double max) {
+            this.min = min;
+            this.max = max;
         }
 
         // Methods

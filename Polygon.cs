@@ -17,6 +17,7 @@ namespace Math2D
         public Vector2[] points;
         public double angle;
         public Vector2[] currentPoints;
+        public Vector2[] vertices;
 
         // Constructor
         public Polygon(Position position, Vector2[] points, double angle = 0)
@@ -25,11 +26,15 @@ namespace Math2D
             this.points = points;
             this.angle = angle;
             this.currentPoints = this.points;
+            this.vertices = new Vector2[this.points.Length + 1];
+            this.updateVertices();
         }
 
         // Method to check if shape is colliding with another shape
         public override bool isColliding(Polygon polygon)
         {
+            this.updateVertices();
+
             Axis[] axes1 = this.getAxes();
             Axis[] axes2 = this.getAxes();
 
@@ -85,13 +90,46 @@ namespace Math2D
         }
 
         public Axis[] getAxes () {
-            return new Axis[1]; // temporary
+            // temporary
+            Axis[] axes = new Axis[this.vertices.Length];
+            // loop over the vertices
+            for (int i = 0; i < this.vertices.Length; i++)
+            {
+                // get the current vertex
+                Vector2 p1 = this.vertices[i];
+                // get the next vertex
+                Vector2 p2 = this.vertices[i + 1 == this.vertices.Length ? 0 : i + 1];
+                // subtract the two to get the edge vector
+                Vector2 edge = p1 - p2;
+                // get either perpendicular vector
+                Vector2 normal = new Vector2(-edge.Y, edge.X);
+                // the perp method is just (x, y) =&gt; (-y, x) or (y, -x)
+                axes[i] = new Axis(normal);
+            }
+            return axes;
         }
 
         public Projection project (Axis axis)
         {
             // temporary
-            return new Projection(new Position(0,0), new Vector2(1, 1));
+            double min = axis.dot(this.vertices[0]);
+            double max = min;
+            for (int i = 1; i < this.vertices.Length; i++)
+            {
+                // NOTE: the axis must be normalized to get accurate projections
+                double p = axis.dot(this.vertices[i]);
+                if (p < min)
+                {
+                    min = p;
+                }
+                else if (p > max)
+                {
+                    max = p;
+                }
+                //Console.WriteLine(p);
+            }
+            Projection proj = new Projection(min, max);
+            return proj;
         }
 
         public void setAngle(double angle) {
@@ -123,6 +161,14 @@ namespace Math2D
 
         public override void changePosition(double x, double y) {
             this.position = new Position(x, y);
+        }
+
+        private void updateVertices() {
+            vertices[0] = new Vector2((float)this.position.x, (float)this.position.y);
+
+            for (int i = 0; i < this.points.Length; i++) {
+                vertices[i + 1] = new Vector2(this.vertices[0].X + this.points[i].X, this.vertices[0].Y + this.points[i].Y);
+            }
         }
     }
 }
