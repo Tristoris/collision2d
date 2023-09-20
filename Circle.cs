@@ -1,4 +1,4 @@
-﻿using CollisionTester.Math2D;
+﻿using Math2D;
 using System;
 using System.Collections.Generic;
 using System.Linq;

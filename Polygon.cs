@@ -14,15 +14,17 @@ namespace Math2D
     {
         // Instance variables
         public Position position;
-        public Vector<double>[] points;
+        public Vector2[] points;
         public double angle;
+        public Vector2[] currentPoints;
 
         // Constructor
-        public Polygon(Position position, Vector<double>[] points, double angle = 0)
+        public Polygon(Position position, Vector2[] points, double angle = 0)
         {
             this.position = position;
             this.points = points;
             this.angle = angle;
+            this.currentPoints = this.points;
         }
 
         // Method to check if shape is colliding with another shape
@@ -83,12 +85,35 @@ namespace Math2D
         }
 
         public Axis[] getAxes () {
-            return new Axis[1];
+            return new Axis[1]; // temporary
         }
 
         public Projection project (Axis axis)
         {
-            return new Projection(new Position(0,0), new Vector<double>( new double[] { 1, 1 }));
+            // temporary
+            return new Projection(new Position(0,0), new Vector2(1, 1));
+        }
+
+        public void setAngle(double angle) {
+            this.angle = angle;
+
+            for (int i = 0; i < this.points.Length; i++)
+            {
+                this.currentPoints[i].X = (float)Math.Cos(angle * this.points[i].X);
+            }
+        }
+
+        public void resizeCurrent(double percentage) {
+            
+        }
+
+        public void resizeOriginal(double percentage)
+        {
+
+        }
+
+        public void changePosition(double x, double y) {
+            this.position = new Position(x, y);
         }
     }
 }

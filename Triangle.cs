@@ -11,13 +11,13 @@ namespace Math2D
     {
 
         // Constructor
-        public Triangle(Position position, Vector<double>[] points) : base(position, points)
+        public Triangle(Position position, Vector2[] points) : base(position, points)
         {
             if (points.Length == 2) { this.position = position; this.points = points; }
             else
             {
                 this.position = new Position(0, 0);
-                this.points = new Vector<double>[] { new Vector<double>(new double[] { 1, 1 }), new Vector<double>(new double[] { 2, 2 }) };
+                this.points = new Vector2[] { new Vector2(1, 1), new Vector2(2, 2) };
             }
         }
     }

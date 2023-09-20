@@ -12,10 +12,10 @@ namespace Math2D
     {
         // Variables
         Position position;
-        Vector<double> distance;
+        Vector2 distance;
 
         // Constructors
-        public Projection(Position position, Vector<double> distance) {
+        public Projection(Position position, Vector2 distance) {
             this.position = position;
             this.distance = distance;
         }
