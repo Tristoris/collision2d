@@ -37,33 +37,37 @@ namespace Math2D
 
             Axis[] axes1 = this.getAxes();
             Axis[] axes2 = this.getAxes();
-
+            Console.WriteLine("axes1");
             // loop over the axes1
             for (int i = 0; i < axes1.Length; i++)
             {
+                Console.WriteLine("i: " + i);
                 Axis axis = axes1[i];
                 // project both shapes onto the axis
                 Projection p1 = this.project(axis);
                 Projection p2 = polygon.project(axis);
+
                 // do the projections overlap?
-                if (!p1.overlap(p2))
+                int result = (int)p1.overlap(p2);
+                if (result == (int)Projection.Result.outside)
                 {
-                    // then we can guarantee that the shapes do not overlap
                     return false;
                 }
             }
 
+            Console.WriteLine("axes2");
             // loop over the axes2
             for (int i = 0; i < axes2.Length; i++)
             {
+                Console.WriteLine("i: " + i);
                 Axis axis = axes2[i];
                 // project both shapes onto the axis
                 Projection p1 = this.project(axis);
                 Projection p2 = polygon.project(axis);
+
                 // do the projections overlap?
-                if (!p1.overlap(p2))
-                {
-                    // then we can guarantee that the shapes do not overlap
+                int result = (int)p1.overlap(p2);
+                if (result == (int)Projection.Result.outside) {
                     return false;
                 }
             }
@@ -129,6 +133,7 @@ namespace Math2D
                 //Console.WriteLine(p);
             }
             Projection proj = new Projection(min, max);
+            Console.WriteLine(min + " " + max);
             return proj;
         }
 

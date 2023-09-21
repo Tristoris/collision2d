@@ -10,6 +10,12 @@ namespace Math2D
 {
     public class Projection
     {
+        public enum Result {
+             overlaps = 0,
+             contains,
+             outside
+        }
+
         // Variables
         double min;
         double max;
@@ -21,8 +27,12 @@ namespace Math2D
         }
 
         // Methods
-        public bool overlap(Projection p) {
-            return true;
+        public Result overlap(Projection p) {
+            if (p.min < this.max && this.max < p.max) return Result.overlaps;
+            else if (this.min < p.max && p.max < this.max) return Result.overlaps;
+            else if (p.min < this.max && p.max < this.max) return Result.contains;
+            else if (this.min < p.max && this.max < p.max) return Result.contains;
+            return Result.outside;
         }
     }
 }
