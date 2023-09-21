@@ -25,23 +25,26 @@ namespace Math2D
             this.position = position;
             this.points = points;
             this.angle = angle;
-            this.currentPoints = this.points;
+            this.currentPoints = new Vector2[this.points.Length];
+            for (int i = 0; i < points.Length; i++) this.currentPoints[i] = new Vector2(this.points[i].X, this.points[i].Y);
             this.vertices = new Vector2[this.points.Length + 1];
-            this.updateVertices();
+            //this.updateVertices();
         }
 
         // Method to check if shape is colliding with another shape
         public override bool isColliding(Polygon polygon)
         {
             this.updateVertices();
+            polygon.updateVertices();
+            //for (int i = 0; i < this.points.Length; i++) Console.WriteLine(this.points[i]);
 
             Axis[] axes1 = this.getAxes();
             Axis[] axes2 = this.getAxes();
-            Console.WriteLine("axes1");
+            //Console.WriteLine("axes1");
             // loop over the axes1
             for (int i = 0; i < axes1.Length; i++)
             {
-                Console.WriteLine("i: " + i);
+                //Console.WriteLine("i: " + i);
                 Axis axis = axes1[i];
                 // project both shapes onto the axis
                 Projection p1 = this.project(axis);
@@ -55,11 +58,11 @@ namespace Math2D
                 }
             }
 
-            Console.WriteLine("axes2");
+            //Console.WriteLine("axes2");
             // loop over the axes2
             for (int i = 0; i < axes2.Length; i++)
             {
-                Console.WriteLine("i: " + i);
+                //Console.WriteLine("i: " + i);
                 Axis axis = axes2[i];
                 // project both shapes onto the axis
                 Projection p1 = this.project(axis);
@@ -67,6 +70,7 @@ namespace Math2D
 
                 // do the projections overlap?
                 int result = (int)p1.overlap(p2);
+                //Console.WriteLine("result: " + result);
                 if (result == (int)Projection.Result.outside) {
                     return false;
                 }
@@ -133,17 +137,26 @@ namespace Math2D
                 //Console.WriteLine(p);
             }
             Projection proj = new Projection(min, max);
-            Console.WriteLine(min + " " + max);
             return proj;
         }
 
         public void setAngle(double angle) {
-            this.angle = angle;
-
-            for (int i = 0; i < this.points.Length; i++)
+            this.angle = angle % 360;
+            if (this.angle == 0)
             {
-                this.currentPoints[i].X = (float)Math.Cos(angle * this.points[i].X) - (float)Math.Sin(angle * this.points[i].Y);
-                this.currentPoints[i].Y = (float)Math.Sin(angle * this.points[i].X) + (float)Math.Cos(angle * this.points[i].Y);
+                for (int i = 0; i < this.points.Length; i++)
+                {
+                    this.currentPoints[i].X = this.points[i].X;
+                    this.currentPoints[i].Y = this.points[i].Y;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < this.points.Length; i++)
+                {
+                    this.currentPoints[i].X = (float)Math.Cos(this.angle * this.points[i].X) - (float)Math.Sin(this.angle * this.points[i].Y);
+                    this.currentPoints[i].Y = (float)Math.Sin(this.angle * this.points[i].X) + (float)Math.Cos(this.angle * this.points[i].Y);
+                }
             }
         }
 
@@ -170,9 +183,10 @@ namespace Math2D
 
         private void updateVertices() {
             vertices[0] = new Vector2((float)this.position.x, (float)this.position.y);
-
-            for (int i = 0; i < this.points.Length; i++) {
-                vertices[i + 1] = new Vector2(this.vertices[0].X + this.points[i].X, this.vertices[0].Y + this.points[i].Y);
+            //Console.WriteLine(vertices[0]);
+            for (int i = 0; i < this.currentPoints.Length; i++) {
+                vertices[i + 1] = new Vector2(this.vertices[0].X + this.currentPoints[i].X, this.vertices[0].Y + this.currentPoints[i].Y);
+                //Console.WriteLine(vertices[i + 1]);
             }
         }
     }
