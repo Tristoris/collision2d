@@ -12,8 +12,7 @@ namespace Math2D
     {
         public Vector2 axis;
         public Axis(Vector2 vector) {
-            float norm = (float)Math.Pow(Math.Pow(vector.X, 2) + Math.Pow(vector.Y, 2), 0.5);
-            axis = new Vector2(vector.X / norm, vector.Y / norm);
+            axis = new Vector2(vector.X / vector.Length(), vector.Y / vector.Length());
         }
 
         public double dot(Vector2 v) {

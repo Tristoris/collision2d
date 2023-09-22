@@ -145,6 +145,7 @@ namespace Math2D
 
         public void setAngle(double angle) {
             this.angle = angle % 360;
+            Console.WriteLine("angle " + this.angle);
             if (this.angle == 0)
             {
                 for (int i = 0; i < this.points.Length; i++)
@@ -157,12 +158,11 @@ namespace Math2D
             {
                 for (int i = 0; i < this.points.Length; i++)
                 {
-                    float vecLength = this.vectorLength(this.points[i]);
-                    double currentAngle = 180 / Math.PI * (this.points[i].Y / Math.Abs(this.points[i].Y)) * Math.Acos(this.points[i].X / vecLength);
+                    double currentAngle = 180 / Math.PI * (this.points[i].Y / Math.Abs(this.points[i].Y)) * Math.Acos(this.points[i].X / this.points[i].Length());
                     Console.WriteLine(currentAngle);
-                    this.currentPoints[i].X = vecLength * (float)Math.Cos(this.angle + currentAngle);
-                    this.currentPoints[i].Y = vecLength * (float)Math.Sin(this.angle + currentAngle);
-                    Console.WriteLine(currentPoints[i].X + " " + currentPoints[i].Y);
+                    this.currentPoints[i].X = (float)(this.points[i].Length() * Math.Cos(this.angle + currentAngle));
+                    this.currentPoints[i].Y = (float)(this.points[i].Length() * Math.Sin(this.angle + currentAngle));
+                    Console.WriteLine(this.currentPoints[i].X + " " + currentPoints[i].Y);
                 }
             }
         }
@@ -195,10 +195,6 @@ namespace Math2D
                 vertices[i + 1] = new Vector2(this.vertices[0].X + this.currentPoints[i].X, this.vertices[0].Y + this.currentPoints[i].Y);
                 Console.WriteLine("vertice " + vertices[i + 1]);
             }
-        }
-
-        private float vectorLength(Vector2 v) {
-            return (float)Math.Pow(Math.Pow(v.X, 2) + Math.Pow(v.Y, 2), 0.5);
         }
     }
 }
