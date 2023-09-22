@@ -160,8 +160,8 @@ namespace Math2D
                 {
                     double currentAngle = 180 / Math.PI * (this.points[i].Y / Math.Abs(this.points[i].Y)) * Math.Acos(this.points[i].X / this.points[i].Length());
                     Console.WriteLine(currentAngle);
-                    this.currentPoints[i].X = (float)(this.points[i].Length() * Math.Cos(this.angle + currentAngle));
-                    this.currentPoints[i].Y = (float)(this.points[i].Length() * Math.Sin(this.angle + currentAngle));
+                    this.currentPoints[i].X = (float)(this.points[i].Length() * Math.Cos(this.degreesToRadians(this.angle + currentAngle)));
+                    this.currentPoints[i].Y = (float)(this.points[i].Length() * Math.Sin(this.degreesToRadians(this.angle + currentAngle)));
                     Console.WriteLine(this.currentPoints[i].X + " " + currentPoints[i].Y);
                 }
             }
@@ -195,6 +195,10 @@ namespace Math2D
                 vertices[i + 1] = new Vector2(this.vertices[0].X + this.currentPoints[i].X, this.vertices[0].Y + this.currentPoints[i].Y);
                 Console.WriteLine("vertice " + vertices[i + 1]);
             }
+        }
+
+        private double degreesToRadians(double angle) {
+            return Math.PI / 180 * angle;
         }
     }
 }
