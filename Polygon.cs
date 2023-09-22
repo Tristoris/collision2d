@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Text;
@@ -39,7 +40,7 @@ namespace Math2D
             //for (int i = 0; i < this.points.Length; i++) Console.WriteLine(this.points[i]);
 
             Axis[] axes1 = this.getAxes();
-            Axis[] axes2 = this.getAxes();
+            Axis[] axes2 = polygon.getAxes();
             //Console.WriteLine("axes1");
             // loop over the axes1
             for (int i = 0; i < axes1.Length; i++)
@@ -50,6 +51,8 @@ namespace Math2D
                 Projection p1 = this.project(axis);
                 Projection p2 = polygon.project(axis);
 
+                Console.WriteLine("p1: " + p1.min + " " + p1.max);
+                Console.WriteLine("p2: " + p2.min + " " + p2.max);
                 // do the projections overlap?
                 int result = (int)p1.overlap(p2);
                 if (result == (int)Projection.Result.outside)
@@ -154,8 +157,12 @@ namespace Math2D
             {
                 for (int i = 0; i < this.points.Length; i++)
                 {
-                    this.currentPoints[i].X = (float)Math.Cos(this.angle * this.points[i].X) - (float)Math.Sin(this.angle * this.points[i].Y);
-                    this.currentPoints[i].Y = (float)Math.Sin(this.angle * this.points[i].X) + (float)Math.Cos(this.angle * this.points[i].Y);
+                    float vecLength = this.vectorLength(this.points[i]);
+                    double currentAngle = 180 / Math.PI * (this.points[i].Y / Math.Abs(this.points[i].Y)) * Math.Acos(this.points[i].X / vecLength);
+                    Console.WriteLine(currentAngle);
+                    this.currentPoints[i].X = vecLength * (float)Math.Cos(this.angle + currentAngle);
+                    this.currentPoints[i].Y = vecLength * (float)Math.Sin(this.angle + currentAngle);
+                    Console.WriteLine(currentPoints[i].X + " " + currentPoints[i].Y);
                 }
             }
         }
@@ -183,11 +190,15 @@ namespace Math2D
 
         private void updateVertices() {
             vertices[0] = new Vector2((float)this.position.x, (float)this.position.y);
-            //Console.WriteLine(vertices[0]);
+            Console.WriteLine("vertice " + vertices[0]);
             for (int i = 0; i < this.currentPoints.Length; i++) {
                 vertices[i + 1] = new Vector2(this.vertices[0].X + this.currentPoints[i].X, this.vertices[0].Y + this.currentPoints[i].Y);
-                //Console.WriteLine(vertices[i + 1]);
+                Console.WriteLine("vertice " + vertices[i + 1]);
             }
+        }
+
+        private float vectorLength(Vector2 v) {
+            return (float)Math.Pow(Math.Pow(v.X, 2) + Math.Pow(v.Y, 2), 0.5);
         }
     }
 }
