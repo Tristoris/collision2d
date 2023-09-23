@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,6 +25,11 @@ namespace Math2D
         // Method to check if shape is colliding with another shape
         public override bool isColliding(Polygon polygon)
         {
+            polygon.updateVertices();
+            Vector2[] closestVectors = polygon.getClosest(this.position.x, this.position.y);
+            
+            //for (int i = 0; i < closestVectors.Length; i++) { Console.WriteLine(closestVectors[i]); }        
+            // TODO: make function and solve circle equation
             return true;
         }
 
@@ -73,5 +79,6 @@ namespace Math2D
         {
             this.position = new Position(x, y);
         }
+
     }
 }

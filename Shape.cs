@@ -9,6 +9,12 @@ namespace Math2D
     // Abstract class shape
     public abstract class Shape
     {
+        public enum Result
+        {
+            overlaps = 0,
+            contains,
+            outside
+        }
         // Abstract methods for shapes
         public abstract bool isColliding(Polygon polygon);
         public abstract bool isColliding(Circle circle);

@@ -10,11 +10,6 @@ namespace Math2D
 {
     public class Projection
     {
-        public enum Result {
-             overlaps = 0,
-             contains,
-             outside
-        }
 
         // Variables
         public double min;
@@ -27,15 +22,15 @@ namespace Math2D
         }
 
         // Methods
-        public Result overlap(Projection p) {
+        public Shape.Result overlap(Projection p) {
             //Console.WriteLine("\nstart of overlaptest");
             //Console.WriteLine(this.min + " " + this.max + " " + p.min + " " + p.max + " ");
-            if (p.min < this.max && this.max < p.max) return Result.overlaps;
-            else if (this.min < p.max && p.max < this.max) return Result.overlaps;
-            else if (p.min <= this.max && p.max >= this.max) return Result.contains;
-            else if (this.min <= p.max && this.max >= p.max) return Result.contains;
-            else if (this.max == p.max && this.min == p.min) return Result.overlaps;
-            return Result.outside;
+            if (p.min < this.max && this.max < p.max) return Shape.Result.overlaps;
+            else if (this.min < p.max && p.max < this.max) return Shape.Result.overlaps;
+            else if (p.min <= this.max && p.max >= this.max) return Shape.Result.contains;
+            else if (this.min <= p.max && this.max >= p.max) return Shape.Result.contains;
+            else if (this.max == p.max && this.min == p.min) return Shape.Result.overlaps;
+            return Shape.Result.outside;
         }
     }
 }

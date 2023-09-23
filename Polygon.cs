@@ -51,11 +51,11 @@ namespace Math2D
                 Projection p1 = this.project(axis);
                 Projection p2 = polygon.project(axis);
 
-                Console.WriteLine("p1: " + p1.min + " " + p1.max);
-                Console.WriteLine("p2: " + p2.min + " " + p2.max);
+                //Console.WriteLine("p1: " + p1.min + " " + p1.max);
+                //Console.WriteLine("p2: " + p2.min + " " + p2.max);
                 // do the projections overlap?
                 int result = (int)p1.overlap(p2);
-                if (result == (int)Projection.Result.outside)
+                if (result == (int)Result.outside)
                 {
                     return false;
                 }
@@ -74,7 +74,7 @@ namespace Math2D
                 // do the projections overlap?
                 int result = (int)p1.overlap(p2);
                 //Console.WriteLine("result: " + result);
-                if (result == (int)Projection.Result.outside) {
+                if (result == (int)Result.outside) {
                     return false;
                 }
             }
@@ -145,7 +145,7 @@ namespace Math2D
 
         public void setAngle(double angle) {
             this.angle = angle % 360;
-            Console.WriteLine("angle " + this.angle);
+            //Console.WriteLine("angle " + this.angle);
             if (this.angle == 0)
             {
                 for (int i = 0; i < this.points.Length; i++)
@@ -159,10 +159,10 @@ namespace Math2D
                 for (int i = 0; i < this.points.Length; i++)
                 {
                     double currentAngle = 180 / Math.PI * (this.points[i].Y / Math.Abs(this.points[i].Y)) * Math.Acos(this.points[i].X / this.points[i].Length());
-                    Console.WriteLine(currentAngle);
+                    //Console.WriteLine(currentAngle);
                     this.currentPoints[i].X = (float)(this.points[i].Length() * Math.Cos(this.degreesToRadians(this.angle + currentAngle)));
                     this.currentPoints[i].Y = (float)(this.points[i].Length() * Math.Sin(this.degreesToRadians(this.angle + currentAngle)));
-                    Console.WriteLine(this.currentPoints[i].X + " " + currentPoints[i].Y);
+                    //Console.WriteLine(this.currentPoints[i].X + " " + currentPoints[i].Y);
                 }
             }
         }
@@ -188,17 +188,54 @@ namespace Math2D
             this.position = new Position(x, y);
         }
 
-        private void updateVertices() {
+        public void updateVertices() {
             vertices[0] = new Vector2((float)this.position.x, (float)this.position.y);
-            Console.WriteLine("vertice " + vertices[0]);
+            //Console.WriteLine("vertice " + vertices[0]);
             for (int i = 0; i < this.currentPoints.Length; i++) {
                 vertices[i + 1] = new Vector2(this.vertices[0].X + this.currentPoints[i].X, this.vertices[0].Y + this.currentPoints[i].Y);
-                Console.WriteLine("vertice " + vertices[i + 1]);
+                //Console.WriteLine("vertice " + vertices[i + 1]);
             }
         }
 
         private double degreesToRadians(double angle) {
             return Math.PI / 180 * angle;
         }
+
+        public Vector2[] getClosest(double x, double y) {
+            Vector2[] vectors = new Vector2[2];
+
+            Vector2 pos = new Vector2((float)x, (float)y);
+
+            Vector2 min = new Vector2(0,0);
+            Vector2 secondMin = new Vector2(0, 0);
+
+            double minLength = Double.MaxValue;
+            double secondMinLength = minLength;
+
+            for (int i = 0; i < this.vertices.Length; i++)
+            {
+                // NOTE: the axis must be normalized to get accurate projections
+                double length = (this.vertices[i] - pos).Length();
+                if (length < secondMinLength)
+                {
+                    if (length < minLength) {
+                        secondMin = new Vector2(min.X, min.Y);
+                        secondMinLength = minLength;
+                        min = this.vertices[i];
+                        minLength = length;
+                    } else
+                    {
+                        secondMin = this.vertices[i];
+                        secondMinLength = length;
+                    }
+                }
+                //Console.WriteLine(p);
+            }
+
+            vectors[0] = min;
+            vectors[1] = secondMin;
+
+            return vectors;
+        } 
     }
 }
