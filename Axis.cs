@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Math2D
 {
-    public class Axis
+    public sealed class Axis
     {
         public Vector2 axis;
         public Axis(Vector2 vector) {
