@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Math2D
 {
-    public class Circle : Shape
+    public sealed class Circle : Shape
     {
         // Instance variables
         public Position position;
