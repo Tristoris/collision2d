@@ -27,10 +27,53 @@ namespace Math2D
         {
             polygon.updateVertices();
             Vector2[] closestVectors = polygon.getClosest(this.position.x, this.position.y);
-            
+
+            double x = closestVectors[1].X - closestVectors[0].X;
+
+            if (x == 0) {
+                if (Math.Abs(closestVectors[0].X - this.position.x) < this.currentRadius) return true;
+                else return false;
+            }
+            double y = closestVectors[1].Y - closestVectors[0].Y;
+            //Console.WriteLine("y: " + y);
+            double m = y / x;
+            //Console.WriteLine("m: " + m);
+            double c = closestVectors[0].Y - (m * closestVectors[0].X);
+            //Console.WriteLine("c: " + c);
+            double a = m * m + 1;
+            //Console.WriteLine("a: " + a);
+            double p = (2 * c * m + 2 * this.position.x + 2 * m * this.position.y) / a;
+            //Console.WriteLine("p: " + p);
+            double q = (c * c + 2 * c * this.position.y +  this.position.y * this.position.y + this.position.x * this.position.x - this.currentRadius * this.currentRadius) / a;
+            //Console.WriteLine("q: " + q);
+            double determinant = p * p / 4 - q;
+
+            //Console.WriteLine("determinant: " + determinant);
+
+            if (determinant < 0) return false;
+
+            double p2 = p / (-2);
+
+            double x1 = p2 + Math.Sqrt(determinant);
+
+            double x2 = p2 - Math.Sqrt(determinant);
+
+            //Console.WriteLine(x1 + " " + x2);
+
+            if (closestVectors[0].X < closestVectors[1].X )
+            {
+                //Console.WriteLine("uwu");
+                if (x2 < closestVectors[0].X || x1 > closestVectors[1].X) return false;
+                return true;
+            }
+            else {
+                //Console.WriteLine("awa");
+                if (x2 < closestVectors[1].X || x1 > closestVectors[0].X) return false;
+                return true;
+            }
             //for (int i = 0; i < closestVectors.Length; i++) { Console.WriteLine(closestVectors[i]); }        
             // TODO: make function and solve circle equation
-            return true;
+            //return true;
         }
 
         // Method to check if shape is colliding with another shape
@@ -40,7 +83,7 @@ namespace Math2D
             double dy = Math.Pow(this.position.y - circle.position.y, 2);
             double distance = Math.Sqrt(dx + dy);
 
-            if (this.radius + circle.radius >= distance) return true;
+            if (this.radius + circle.currentRadius >= distance) return true;
 
             return false;
         }
@@ -60,8 +103,8 @@ namespace Math2D
             double dy = Math.Pow(this.position.y - circle.position.y, 2);
             double distance = Math.Sqrt(dx + dy);
 
-            if (this.radius > circle.radius && this.radius > circle.radius + distance) return true;
-            else if (circle.radius > this.radius + distance) return true;
+            if (this.currentRadius > circle.currentRadius && this.currentRadius > circle.currentRadius + distance) return true;
+            else if (circle.currentRadius > this.currentRadius + distance) return true;
             return false;
         }
 
