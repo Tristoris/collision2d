@@ -85,12 +85,108 @@ namespace Math2D
         // Method to check if shape is colliding with another shape
         public override bool isColliding(Circle circle)
         {
-            return true;
+            this.updateVertices();
+            Vector2[] closestVectors = this.getClosest(circle.position.x, circle.position.y);
+
+            double dx = Math.Pow(circle.position.x - closestVectors[0].X, 2);
+            double dy = Math.Pow(circle.position.y - closestVectors[0].Y, 2);
+            double distance = Math.Sqrt(dx + dy);
+
+            if (circle.radius >= distance) return true;
+
+            double x = closestVectors[1].X - closestVectors[0].X;
+
+            if (x == 0) {
+                if (Math.Abs(closestVectors[0].X - circle.position.x) < circle.currentRadius) return true;
+                else return false;
+            }
+            double yDelta = closestVectors[1].Y - closestVectors[0].Y;
+            //Console.WriteLine("y: " + yDelta);
+            double m = yDelta / x;
+            //Console.WriteLine("m: " + m);
+            double c = closestVectors[0].Y - (m * closestVectors[0].X);
+            //Console.WriteLine("c: " + c);
+            double a = m * m + 1;
+            //Console.WriteLine("a: " + a);
+            double p = 2 * (c * m + -circle.position.x + m * -circle.position.y) / a;
+            //Console.WriteLine("p: " + p);
+            double q = (c * c + 2 * c * -circle.position.y +  circle.position.y * circle.position.y + circle.position.x * circle.position.x - circle.currentRadius * circle.currentRadius) / a;
+            //Console.WriteLine("q: " + q);
+            double determinant = p * p / 4 - q;
+
+            //Console.WriteLine("determinant: " + determinant);
+
+            if (determinant < 0) return false;
+
+            double p2 = p / (-2);
+
+            double x1 = p2 + Math.Sqrt(determinant);
+
+            double x2 = p2 - Math.Sqrt(determinant);
+
+            //Console.WriteLine(x1 + " " + x2);
+
+            if (closestVectors[0].X < closestVectors[1].X )
+            {
+                //Console.WriteLine("uwu");
+                if (x2 > closestVectors[0].X || x1 < closestVectors[1].X) return true;
+                return false;
+            }
+            else {
+                //Console.WriteLine("awa");
+                if (x2 > closestVectors[1].X || x1 < closestVectors[0].X) return true;
+                return false;
+            }
         }
 
         // Method to check if shape is inside another shape
         public override bool isContained(Polygon polygon)
         {
+            this.updateVertices();
+            polygon.updateVertices();
+            //for (int i = 0; i < this.points.Length; i++) Console.WriteLine(this.points[i]);
+
+            Axis[] axes1 = this.getAxes();
+            Axis[] axes2 = polygon.getAxes();
+            //Console.WriteLine("axes1");
+            // loop over the axes1
+            for (int i = 0; i < axes1.Length; i++)
+            {
+                //Console.WriteLine("i: " + i);
+                Axis axis = axes1[i];
+                // project both shapes onto the axis
+                Projection p1 = this.project(axis);
+                Projection p2 = polygon.project(axis);
+
+                //Console.WriteLine("p1: " + p1.min + " " + p1.max);
+                //Console.WriteLine("p2: " + p2.min + " " + p2.max);
+                // do the projections overlap?
+                int result = (int)p1.overlap(p2);
+                if (result == (int)Result.outside || result == (int)Result.overlaps)
+                {
+                    return false;
+                }
+            }
+
+            //Console.WriteLine("axes2");
+            // loop over the axes2
+            for (int i = 0; i < axes2.Length; i++)
+            {
+                //Console.WriteLine("i: " + i);
+                Axis axis = axes2[i];
+                // project both shapes onto the axis
+                Projection p1 = this.project(axis);
+                Projection p2 = polygon.project(axis);
+
+                // do the projections overlap?
+                int result = (int)p1.overlap(p2);
+                //Console.WriteLine("result: " + result);
+                if (result == (int)Result.outside || result == (int)Result.overlaps)
+                {
+                    return false;
+                }
+            }
+
             return true;
         }
 

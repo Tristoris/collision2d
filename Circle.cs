@@ -28,23 +28,29 @@ namespace Math2D
             polygon.updateVertices();
             Vector2[] closestVectors = polygon.getClosest(this.position.x, this.position.y);
 
+            double dx = Math.Pow(this.position.x - closestVectors[0].X, 2);
+            double dy = Math.Pow(this.position.y - closestVectors[0].Y, 2);
+            double distance = Math.Sqrt(dx + dy);
+
+            if (this.radius >= distance) return true;
+
             double x = closestVectors[1].X - closestVectors[0].X;
 
             if (x == 0) {
                 if (Math.Abs(closestVectors[0].X - this.position.x) < this.currentRadius) return true;
                 else return false;
             }
-            double y = closestVectors[1].Y - closestVectors[0].Y;
-            //Console.WriteLine("y: " + y);
-            double m = y / x;
+            double yDelta = closestVectors[1].Y - closestVectors[0].Y;
+            //Console.WriteLine("y: " + yDelta);
+            double m = yDelta / x;
             //Console.WriteLine("m: " + m);
             double c = closestVectors[0].Y - (m * closestVectors[0].X);
             //Console.WriteLine("c: " + c);
             double a = m * m + 1;
             //Console.WriteLine("a: " + a);
-            double p = (2 * c * m + 2 * this.position.x + 2 * m * this.position.y) / a;
+            double p = 2 * (c * m + -this.position.x + m * -this.position.y) / a;
             //Console.WriteLine("p: " + p);
-            double q = (c * c + 2 * c * this.position.y +  this.position.y * this.position.y + this.position.x * this.position.x - this.currentRadius * this.currentRadius) / a;
+            double q = (c * c + 2 * c * -this.position.y +  this.position.y * this.position.y + this.position.x * this.position.x - this.currentRadius * this.currentRadius) / a;
             //Console.WriteLine("q: " + q);
             double determinant = p * p / 4 - q;
 
@@ -63,16 +69,16 @@ namespace Math2D
             if (closestVectors[0].X < closestVectors[1].X )
             {
                 //Console.WriteLine("uwu");
-                if (x2 < closestVectors[0].X || x1 > closestVectors[1].X) return false;
-                return true;
+                if (x2 > closestVectors[0].X || x1 < closestVectors[1].X) return true;
+                return false;
             }
             else {
                 //Console.WriteLine("awa");
-                if (x2 < closestVectors[1].X || x1 > closestVectors[0].X) return false;
-                return true;
+                if (x2 > closestVectors[1].X || x1 < closestVectors[0].X) return true;
+                return false;
             }
             //for (int i = 0; i < closestVectors.Length; i++) { Console.WriteLine(closestVectors[i]); }        
-            // TODO: make function and solve circle equation
+            
             //return true;
         }
 
@@ -91,6 +97,18 @@ namespace Math2D
         // Method to check if shape is inside another shape
         public override bool isContained(Polygon polygon)
         {
+            // TODO: WORKS ONLY IF POLYGON INSIDE CIRCLE, NOT OTHERWISE
+            polygon.updateVertices();
+
+            foreach (Vector2 v in polygon.vertices)
+            {
+                double dx = Math.Pow(this.position.x - v.X, 2);
+                double dy = Math.Pow(this.position.y - v.Y, 2);
+                double distance = Math.Sqrt(dx + dy);
+
+                if (this.radius > distance) return false;
+            }
+
             return true;
         }
 
