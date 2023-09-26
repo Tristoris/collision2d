@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Math2D
 {
-    public class Triangle : Polygon
+    public sealed class Triangle : Polygon
     {
 
         // Constructor
