@@ -9,6 +9,7 @@ namespace Math2D
     // Abstract class shape
     public abstract class Shape
     {
+        // not sure if this is needed or not yet, probably to be reworked TODO
         public enum Result
         {
             overlaps = 0,

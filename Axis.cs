@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Math2D
 {
+    // the axis onto which a shape should be projected
     public sealed class Axis
     {
         public Vector2 axis;

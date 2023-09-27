@@ -18,6 +18,7 @@ namespace Math2D
             this.x = x; this.y = y;
         }
 
+        // get the array representation of the position
         public double[] toArray()
         {
             return new double[] { x, y };

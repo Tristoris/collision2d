@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Math2D
 {
+    // a projection of a shape onto an axis
     public class Projection
     {
 
@@ -22,9 +23,8 @@ namespace Math2D
         }
 
         // Methods
+        // returns the result of the shape overlapping; an overlap, a containment or neither
         public Shape.Result overlap(Projection p) {
-            //Console.WriteLine("\nstart of overlaptest");
-            //Console.WriteLine(this.min + " " + this.max + " " + p.min + " " + p.max + " ");
             if (p.min < this.max && this.max < p.max) return Shape.Result.overlaps;
             else if (this.min < p.max && p.max < this.max) return Shape.Result.overlaps;
             else if (p.min <= this.max && p.max >= this.max) return Shape.Result.contains;

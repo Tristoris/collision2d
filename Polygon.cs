@@ -144,22 +144,17 @@ namespace Math2D
         {
             this.updateVertices();
             polygon.updateVertices();
-            //for (int i = 0; i < this.points.Length; i++) Console.WriteLine(this.points[i]);
 
             Axis[] axes1 = this.getAxes();
             Axis[] axes2 = polygon.getAxes();
-            //Console.WriteLine("axes1");
             // loop over the axes1
             for (int i = 0; i < axes1.Length; i++)
             {
-                //Console.WriteLine("i: " + i);
                 Axis axis = axes1[i];
                 // project both shapes onto the axis
                 Projection p1 = this.project(axis);
                 Projection p2 = polygon.project(axis);
 
-                //Console.WriteLine("p1: " + p1.min + " " + p1.max);
-                //Console.WriteLine("p2: " + p2.min + " " + p2.max);
                 // do the projections overlap?
                 int result = (int)p1.overlap(p2);
                 if (result == (int)Result.outside || result == (int)Result.overlaps)
@@ -168,11 +163,9 @@ namespace Math2D
                 }
             }
 
-            //Console.WriteLine("axes2");
             // loop over the axes2
             for (int i = 0; i < axes2.Length; i++)
             {
-                //Console.WriteLine("i: " + i);
                 Axis axis = axes2[i];
                 // project both shapes onto the axis
                 Projection p1 = this.project(axis);
@@ -180,7 +173,6 @@ namespace Math2D
 
                 // do the projections overlap?
                 int result = (int)p1.overlap(p2);
-                //Console.WriteLine("result: " + result);
                 if (result == (int)Result.outside || result == (int)Result.overlaps)
                 {
                     return false;
@@ -193,11 +185,12 @@ namespace Math2D
         // Method to check if shape is inside another shape
         public override bool isContained(Circle circle)
         {
+            // TODO: NOT DONE YET, TO BE DONE YET
             return true;
         }
 
+        // gets the axes of a certain shape (required for collision)
         public Axis[] getAxes () {
-            // temporary
             Axis[] axes = new Axis[this.vertices.Length];
             // loop over the vertices
             for (int i = 0; i < this.vertices.Length; i++)
@@ -216,6 +209,7 @@ namespace Math2D
             return axes;
         }
 
+        // projects the shape onto the axis
         public Projection project (Axis axis)
         {
             // temporary
@@ -239,11 +233,13 @@ namespace Math2D
             return proj;
         }
 
+        // changes the angle of the shape to a certain angle value (rotation)
         public void setAngle(double angle) {
-            this.angle = angle % 360;
-            //Console.WriteLine("angle " + this.angle);
+            this.angle = angle % 360; // makes sure that the angle is within the 360 degrees
+
             if (this.angle == 0)
             {
+                // if the angle is 0, just reset all points to their previous ones
                 for (int i = 0; i < this.points.Length; i++)
                 {
                     this.currentPoints[i].X = this.points[i].X;
@@ -252,17 +248,17 @@ namespace Math2D
             }
             else
             {
+                // if angle not 0, changes the current points by a formula
                 for (int i = 0; i < this.points.Length; i++)
                 {
                     double currentAngle = 180 / Math.PI * (this.points[i].Y / Math.Abs(this.points[i].Y)) * Math.Acos(this.points[i].X / this.points[i].Length());
-                    //Console.WriteLine(currentAngle);
                     this.currentPoints[i].X = (float)(this.points[i].Length() * Math.Cos(this.degreesToRadians(this.angle + currentAngle)));
                     this.currentPoints[i].Y = (float)(this.points[i].Length() * Math.Sin(this.degreesToRadians(this.angle + currentAngle)));
-                    //Console.WriteLine(this.currentPoints[i].X + " " + currentPoints[i].Y);
                 }
             }
         }
 
+        // resizes the changed up shape by a percentage
         public override void resizeCurrent(double percentage) {
             for (int i = 0; i < this.points.Length; i++)
             {
@@ -271,6 +267,7 @@ namespace Math2D
             }
         }
 
+        // resizes the original shape (that has not been changed) by a percentage
         public override void resizeOriginal(double percentage)
         {
             for (int i = 0; i < this.points.Length; i++)
@@ -280,33 +277,37 @@ namespace Math2D
             }
         }
 
+        // changes the position of the shape
         public override void changePosition(double x, double y) {
             this.position = new Position(x, y);
         }
 
+        // updates the vertices (required to call before any collision logic)
         public void updateVertices() {
             vertices[0] = new Vector2((float)this.position.x, (float)this.position.y);
-            //Console.WriteLine("vertice " + vertices[0]);
             for (int i = 0; i < this.currentPoints.Length; i++) {
                 vertices[i + 1] = new Vector2(this.vertices[0].X + this.currentPoints[i].X, this.vertices[0].Y + this.currentPoints[i].Y);
-                //Console.WriteLine("vertice " + vertices[i + 1]);
             }
         }
 
+        // Method to convert degrees to radians
         private double degreesToRadians(double angle) {
             return Math.PI / 180 * angle;
         }
 
+        // Method to get the 2 closest points of a polygon to a certain point
+        // returns an array of Length 2 where [0] is the smallest point
+        // and where [1] is the second smallest number
         public Vector2[] getClosest(double x, double y) {
             Vector2[] vectors = new Vector2[2];
 
-            Vector2 pos = new Vector2((float)x, (float)y);
+            Vector2 pos = new Vector2((float)x, (float)y); // The point as a vector
 
-            Vector2 min = new Vector2(0,0);
-            Vector2 secondMin = new Vector2(0, 0);
+            Vector2 min = new Vector2(0,0); // vector closest to the point
+            Vector2 secondMin = new Vector2(0, 0); // vector second closest to the point
 
-            double minLength = Double.MaxValue;
-            double secondMinLength = minLength;
+            double minLength = Double.MaxValue; // length between point and min
+            double secondMinLength = minLength; // length between point and secondMin
 
             for (int i = 0; i < this.vertices.Length; i++)
             {
@@ -314,6 +315,8 @@ namespace Math2D
                 double length = (this.vertices[i] - pos).Length();
                 if (length < secondMinLength)
                 {
+                    // if the length is smaller than minlength, update min and secondmin
+                    // else update only secondmin
                     if (length < minLength) {
                         secondMin = new Vector2(min.X, min.Y);
                         secondMinLength = minLength;
@@ -325,7 +328,6 @@ namespace Math2D
                         secondMinLength = length;
                     }
                 }
-                //Console.WriteLine(p);
             }
 
             vectors[0] = min;

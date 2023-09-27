@@ -23,6 +23,8 @@ namespace Math2D
         }
 
         // Method to check if shape is colliding with another shape
+        // checks the smallest distance of the closest segment of the shape
+        // if it is smaller than the radius -> return colliding: true
         public override bool isColliding(Polygon polygon)
         {
             polygon.updateVertices();
@@ -126,16 +128,19 @@ namespace Math2D
             return false;
         }
 
+        // resize the changed up radius of the circle by a percentage
         public override void resizeCurrent(double percentage)
         {
             this.currentRadius = percentage * this.currentRadius;
         }
 
+        // resize the original by a percentage
         public override void resizeOriginal(double percentage)
         {
             this.currentRadius = percentage * this.radius;
         }
 
+        // change the position of the circle
         public override void changePosition(double x, double y)
         {
             this.position = new Position(x, y);

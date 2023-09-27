@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Math2D
 {
+    // just a square
     public sealed class Square : Polygon
     {
 
