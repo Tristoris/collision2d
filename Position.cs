@@ -10,8 +10,8 @@ namespace Math2D
     public struct Position
     {
         // Instance Variables
-        public double x;
-        public double y;
+        public readonly double x;
+        public readonly double y;
 
         // Constructor
         public Position(double x, double y) {
